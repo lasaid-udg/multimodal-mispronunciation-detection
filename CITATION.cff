@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: >
   If you use this code or dataset in your research, please cite the associated
-  paper using the metadata below. The citation will be updated upon acceptance.
+  paper using the metadata below.
 title: >
   md-emg: Reproducible ML Pipeline for Multimodal English Mispronunciation
   Detection (Acoustic + Surface EMG)
@@ -14,7 +14,7 @@ abstract: >
   and Benjamini-Hochberg FDR correction across 20 experimental scenarios.
 version: 0.3.5.1
 date-released: "2026-11-08"
-license: TBD
+license: MIT
 repository-code: https://github.com/placeholder/md-emg
 keywords:
   - mispronunciation detection
@@ -26,21 +26,36 @@ keywords:
   - pronunciation
   - multimodal
 authors:
-  - name: "[Author names to be confirmed by the PI before public release]"
-    note: >
-      Full author list, affiliations, and ORCID identifiers will be added
-      upon manuscript acceptance. Do not publish this CITATION.cff until
-      the author metadata is verified and approved.
+  - family-names: Guzmán-Vázquez
+    given-names: Arturo
+    affiliation: >
+      Universidad de Guadalajara, Centro Universitario de Ciencias Exactas
+      e Ingenierías, Departamento de Innovación basada en la Información y
+      el Conocimiento, Guadalajara, Jalisco, México
+  - family-names: Román-Godínez
+    given-names: Israel
+    affiliation: >
+      Universidad de Guadalajara, Centro Universitario de Ciencias Exactas
+      e Ingenierías, Departamento de Innovación basada en la Información y
+      el Conocimiento, Guadalajara, Jalisco, México
+  - family-names: Torres-Ramos
+    given-names: Sulema
+    email: sulema.torres@academicos.udg.mx
+    affiliation: >
+      Universidad de Guadalajara, Centro Universitario de Ciencias Exactas
+      e Ingenierías, Departamento de Ciencias Computacionales,
+      Guadalajara, Jalisco, México
 references:
   - type: article
     title: >
       A Multimodal Machine Learning Approach to English Mispronunciation
       Detection Using Acoustic and Surface Electromyographic Signals
     authors:
-      - name: "[Author names — pending confirmation]"
+      - family-names: Guzmán-Vázquez
+        given-names: Arturo
+      - family-names: Román-Godínez
+        given-names: Israel
+      - family-names: Torres-Ramos
+        given-names: Sulema
     year: 2026
     status: under-review
-    notes: >
-      Manuscript under review. DOI and journal information will be added upon
-      acceptance. The CITATION.cff doi field will be set to the Zenodo/OSF
-      deposit DOI once the repository is archived.

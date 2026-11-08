@@ -260,9 +260,9 @@ a data sharing agreement. Contact the corresponding author.
 
 ## License
 
-**Code:** to be added before public release.
+**Code:** MIT License — see [`LICENSE`](LICENSE).
 
-**Dataset:** to be confirmed pending institutional review.
+**Dataset:** Creative Commons Attribution 4.0 International (CC BY 4.0) — see [`LICENSE`](LICENSE).
 
 ---
 

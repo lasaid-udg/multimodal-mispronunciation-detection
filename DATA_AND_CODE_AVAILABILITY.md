@@ -5,10 +5,10 @@ cross-validation, bootstrap confidence intervals, paired permutation tests, and
 Benjamini–Hochberg FDR correction — is publicly available at:
 
 > [https://github.com/placeholder/md-emg](https://github.com/placeholder/md-emg)
-> (version 0.3.5.1)
+> (version 0.3.5.1, MIT License)
 
 A derived tabular feature dataset (1,558 pronunciation recordings × 483 acoustic and EMG
-columns) is distributed with the repository under the terms described in the LICENSE file.
+columns) is distributed with the repository under the CC BY 4.0 license.
 
 The raw biometric recordings (audio and surface electromyographic signals) are not publicly
 distributed. Requests for access to the raw data should be directed to the corresponding author.
