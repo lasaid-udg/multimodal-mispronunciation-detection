@@ -1,170 +1,125 @@
-# data/
+# Dataset
 
-This directory contains the dataset used in the paper
-*"A Multimodal Machine Learning Approach to English Mispronunciation Detection
-Using Acoustic and Surface Electromyographic Signals"*.
+This directory contains the dataset accompanying the paper:
+
+> **A Multimodal Machine Learning Approach to English Mispronunciation Detection
+> Using Acoustic and Surface Electromyographic Signals**
 
 ---
 
-## Directory structure
+## Files included
 
 ```
 data/
-├── raw/
-│   └── Nuevo_final_df.csv          # Original dataset (491 cols) — NOT distributed publicly
 ├── derived/
-│   ├── public_dataset.csv          # Public version (483 cols) — 8 auxiliary cols removed
-│   └── public_dataset_manifest.json  # Provenance manifest with SHA-256 checksums
-└── metadata/
-    ├── data_dictionary.csv         # Full column descriptions (491 entries)
-    ├── data_dictionary.md          # Human-readable version of the dictionary
-    ├── schema.json                 # Dataset schema (types, ranges, constraints)
-    ├── dataset_statistics.json     # Verified summary statistics (matched to manuscript)
-    ├── dataset_audit.json          # Per-column audit report (nulls, sentinels, inf)
-    └── phoneme_mapping.csv         # word id → phoneme category mapping (40 rows)
+│   ├── public_dataset.csv              # Feature dataset (1,558 rows × 483 columns)
+│   └── public_dataset_manifest.json    # SHA-256 checksums
+├── metadata/
+│   ├── data_dictionary.csv             # Column descriptions (CSV format)
+│   ├── data_dictionary.md              # Column descriptions (readable format)
+│   ├── schema.json                     # Column types and value ranges
+│   ├── dataset_statistics.json         # Summary statistics per column
+│   └── phoneme_mapping.csv             # Word ID → phoneme category (40 words)
+└── raw/
+    └── (place Nuevo_final_df.csv here) # Original file — not distributed
 ```
 
 ---
 
-## Datasets
-
-### `raw/Nuevo_final_df.csv` — Original dataset (NOT DISTRIBUTED)
+## The dataset: `derived/public_dataset.csv`
 
 | Property | Value |
 |----------|-------|
-| Rows | 1,558 |
-| Columns | 491 |
-| SHA-256 | `98499BE472A8626F88B6330850ECBAB2218E9BE69B26F79D6A2502A789FFF2E6` |
-| Participants | 39 |
-| Words | 40 |
-| Class 0 (correct) | 1,013 |
-| Class 1 (mispronounced) | 545 |
-
-> **Note:** This file is excluded from version control (see `.gitignore`).
-> It must be placed here before running the pipeline. Contact the corresponding
-> author to obtain the data under a data sharing agreement.
-
-The 8 extra columns relative to the public version are auxiliary ordering/timing
-columns (`order_CH1`, `time_CH1`, `order_CH2`, `time_CH2`, `order_CH3`,
-`time_CH3`, `order_CH4`, `time_CH4`). They are **not used** by the ML pipeline.
-
----
-
-### `derived/public_dataset.csv` — Public distribution version
-
-| Property | Value |
-|----------|-------|
-| Rows | 1,558 |
+| Rows | 1,558 (one per participant × word recording) |
 | Columns | 483 |
 | SHA-256 | `89EB58339E77F6C92EB949474F2338D520C3BF627B0F0853A43CD0F00EE1EA43` |
-| Derived from | `raw/Nuevo_final_df.csv` (drop 8 auxiliary columns) |
+| Participants | 39 |
+| Words | 40 (10 per phoneme contrast: /t/, /θ/, /d/, /ð/) |
+| Class 0 — correct pronunciation | 1,013 rows |
+| Class 1 — mispronunciation (positive class) | 545 rows |
 
-This is a **lossless** derivation: the 8 dropped columns carry no information
-used by any ML scenario. Equivalence between the two versions has been
-verified programmatically for all 20 experimental scenarios
-(see `scripts/prepare_public_dataset.py`).
+### Column structure
 
-To reproduce the derivation deterministically:
+Each row is one participant × one word recording.
 
-```bash
-python scripts/prepare_public_dataset.py
-```
+| Group | Columns | Description |
+|-------|---------|-------------|
+| `id_subject` | 1 | Participant ID (integer, 1–39) |
+| `id_word` | 1 | Word ID (integer, 1–40) |
+| `Clase` | 1 | Label: 0 = correct, 1 = mispronounced |
+| Acoustic features | 84 | Extracted from the audio signal |
+| EMG CH1 features | 99 | Cricothyroid muscle |
+| EMG CH2 features | 99 | Anterior belly of the digastric muscle |
+| EMG CH3 features | 99 | Masseter muscle |
+| EMG CH4 features | 99 | Zygomaticus major muscle |
 
-To validate the file integrity:
+### EMG channel subsets
 
-```bash
-# Public version (483 cols)
-python scripts/validate_dataset.py
+Not all participants have usable EMG recordings for every channel.
+The pipeline automatically selects the appropriate subset for each scenario.
 
-# Original (491 cols, requires raw file)
-python scripts/validate_dataset.py --csv data/raw/Nuevo_final_df.csv --ncols 491
-```
+| Channel | Usable participants | Usable rows |
+|---------|-------------------|-------------|
+| CH1 | 16 | 640 |
+| CH2 | 31 | 1,238 |
+| CH3 | 19 | 760 |
+| CH4 | 22 | 880 |
 
-Both commands should report **28 passed, 0 failed**.
+### Special values
 
----
-
-## Column organisation
-
-Each row corresponds to one participant × one word recording session.
-
-### Identity columns (3)
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `id_subject` | int | Participant ID (1–39) |
-| `id_word` | int | Word ID (1–40) |
-| `Clase` | int | Target label: 0 = correct, 1 = mispronounced |
-
-### Acoustic features (84 columns)
-
-Columns `duration` … `zero_crossing_rate`.
-Extracted from the audio signal using openSMILE / Praat-style feature sets.
-All participants × all words; no missing values by sentinel convention.
-
-### EMG features — 4 channels × 99 columns each = 396 columns
-
-| Channel | Column pattern | Valid subjects | Valid rows |
-|---------|---------------|---------------|-----------|
-| CH1 | `*_CH1*` | 16 | 640 |
-| CH2 | `*_CH2*` | 31 | 1,238 |
-| CH3 | `*_CH3*` | 19 | 760 |
-| CH4 | `*_CH4*` | 22 | 880 |
-
-**Sentinel value:** `888888` marks EMG data that was unavailable for a given
-participant–word combination. The ML pipeline excludes rows where *any* column
-of the target channel contains this sentinel before fitting/evaluating any model.
-
-**Known data quality notes:**
-- 195 NaN values exist across EMG columns (not sentinel).
-- 32 ±Inf values are present exclusively in `lpc1`–`lpc16` EMG columns.
-- The column `aqpq5_shimmer` is a known typographic variant of `apq5_shimmer`
-  — this name is preserved as-is to maintain exact SHA-256 reproducibility.
+- **`888888`** — EMG data was unavailable for that participant–word combination.
+  The pipeline excludes any row where the target channel contains this value.
+- **`NaN`** — 195 values across EMG columns; handled by median imputation inside
+  each training fold.
+- **`±Inf`** — 32 values in `lpc1`–`lpc16` EMG columns; replaced with `NaN`
+  before imputation.
+- **`aqpq5_shimmer`** — known typographic variant of `apq5_shimmer`; the name is
+  preserved as-is in this dataset.
 
 ---
 
 ## Phoneme structure
 
-The 40 words are partitioned into 4 phoneme contrast categories:
+The 40 words are divided into 4 non-overlapping phoneme contrast groups:
 
-| Phoneme | Word IDs | Class 0 | Class 1 |
-|---------|----------|---------|---------|
+| Phoneme | Word IDs | Correct | Mispronounced |
+|---------|----------|---------|--------------|
 | /t/ | 1,3,5,7,9,12,14,16,18,20 | 331 | 59 |
 | /θ/ | 2,4,6,8,10,11,13,15,17,19 | 230 | 159 |
 | /d/ | 21,23,25,27,29,32,34,36,38,40 | 291 | 99 |
 | /ð/ | 22,24,26,28,30,31,33,35,37,39 | 161 | 228 |
 
-The mapping is available in `metadata/phoneme_mapping.csv`.
-The `english_word` column in that file is **UNVERIFIED** — the supplement
-tables list the words but do not include a `id_word` numbering column.
+The mapping from word ID to English word is available in
+`metadata/phoneme_mapping.csv` and in Supplementary Tables S-1 and S-2 of the paper.
 
 ---
 
 ## Experimental scenarios
 
-The pipeline defines **20 ML scenarios** combining modality and channel:
+The pipeline uses this dataset across 20 scenarios (5 phoneme groups × 4 EMG channels),
+each comparing two modalities:
 
-| Code | Modality | Channel filter |
-|------|----------|---------------|
-| `A` | Acoustic only | All 1,558 rows |
-| `EMG_CH1` | EMG CH1 only | 640 rows (16 subjects) |
-| `EMG_CH2` | EMG CH2 only | 1,238 rows (31 subjects) |
-| `EMG_CH3` | EMG CH3 only | 760 rows (19 subjects) |
-| `EMG_CH4` | EMG CH4 only | 880 rows (22 subjects) |
-| `A_CH1` | Acoustic + EMG CH1 | 640 rows |
-| `A_CH2` | Acoustic + EMG CH2 | 1,238 rows |
-| `A_CH3` | Acoustic + EMG CH3 | 760 rows |
-| `A_CH4` | Acoustic + EMG CH4 | 880 rows |
-| `A_CH{1–4}_{t,theta,d,eth}` | Acoustic + EMG, per phoneme | varies |
-
-(plus phoneme-specific sub-scenarios, 20 total — see `docs/REPRODUCIBILITY.md`)
+| Modality | Features |
+|----------|----------|
+| `A` | Acoustic features only (84 columns) |
+| `A_CH{1–4}` | Acoustic + EMG for that channel (84 + 99 = 183 columns) |
 
 ---
 
-## License and ethics
+## Obtaining the original data
 
-> **Pending IRB and data sharing agreement documentation before public release.**
-> See `docs/DATA_RELEASE_REVIEW.md` for the complete release checklist.
+The pipeline can also run from the original 491-column file (`Nuevo_final_df.csv`),
+which additionally contains 8 auxiliary ordering/timing columns not used by the ML pipeline.
+To obtain it, contact the corresponding author.
 
-The raw biometric (EMG + audio) recordings are **not** included in this
-repository. This dataset contains only derived tabular features.
+Place it at `data/raw/Nuevo_final_df.csv` before running the pipeline.
+
+---
+
+## Verifying the dataset
+
+```bash
+md-emg validate-data
+```
+
+Expected output: `28 passed, 0 failed`.

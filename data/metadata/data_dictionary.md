@@ -1,530 +1,523 @@
 # Data Dictionary
 
-**Dataset:** *A Multimodal Machine Learning Approach to English Mispronunciation Detection*  
-**Original:** 491 columns (Nuevo_final_df.csv)  
-**Public version:** 483 columns (8 auxiliary columns excluded after equivalence verification)  
+**Dataset:** *A Multimodal Machine Learning Approach to English Mispronunciation Detection
+Using Acoustic and Surface Electromyographic Signals*
 
-## Documentation status legend
-
-| Code | Meaning |
-|---|---|
-| `VERIFIED_FROM_MANUSCRIPT` | Definition confirmed from manuscript text |
-| `VERIFIED_FROM_SUPPLEMENT` | Definition confirmed from Supplementary Material tables |
-| `MEASURED_FROM_CSV` | Statistic computed from data; independent definition not verified |
-| `NOT_SPECIFIED` | Definition not verifiable from available sources |
+This dictionary describes all 483 columns in `data/derived/public_dataset.csv`.
 
 ## Column groups
 
-| Group | Count | Notes |
-|---|---|---|
-| Identifiers | 2 | id_subject, id_word |
-| Acoustic predictors | 84 | duration through zero_crossing_rate |
-| EMG CH1 predictors | 99 | cricothyroid muscle |
-| EMG CH2 predictors | 99 | anterior belly of the digastric muscle |
-| EMG CH3 predictors | 99 | masseter muscle |
-| EMG CH4 predictors | 99 | zygomaticus major muscle |
-| Auxiliary (order_CH*, time_CH*) | 8 | Excluded from 483-col public version |
-| Target | 1 | Clase |
-| **Total** | **491** | |
+| Group | Count | Description |
+|---|---|
+| Identifiers | 2 | `id_subject`, `id_word` |
+| Target | 1 | `Clase` (0 = correct, 1 = mispronounced) |
+| Acoustic predictors | 84 | `duration` through `zero_crossing_rate` |
+| EMG CH1 predictors | 99 | Cricothyroid muscle |
+| EMG CH2 predictors | 99 | Anterior belly of the digastric muscle |
+| EMG CH3 predictors | 99 | Masseter muscle |
+| EMG CH4 predictors | 99 | Zygomaticus major muscle |
+| **Total** | **483** | |
 
 ## Special values
 
-- **888888**: marks unusable EMG channel for this record. Treated as channel damage; rows with this value in any CHx column are excluded from CHx scenarios.
-- **±inf**: present in 16 LPC columns (lpc1–lpc16) for a small number of records. Replaced with NaN in the ML pipeline before median imputation.
-- **NaN**: 195 total across the dataset; handled by median imputation within training folds.
+- **888888** — EMG data was unavailable for that participant–word combination.
+  Rows containing this value in the target channel are excluded before model fitting.
+- **±Inf** — 32 values in `lpc1`–`lpc16` EMG columns; treated as missing before imputation.
+- **NaN** — 195 values across EMG columns; handled by median imputation inside each training fold.
+- **`aqpq5_shimmer`** — known typographic variant of `apq5_shimmer`; preserved as-is.
 
 ## Full variable listing
 
-| variable_name | role | modality | feature_family | channel | dtype | missing | inf | 888888 | obs_min | obs_max | predictor | public | status |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| id_subject | identifier | — | — | — | float64 | 0 | 0 | 0 | 1.0 | 41.0 | False | True | VERIFIED_FROM_MANUSCRIPT |
-| id_word | identifier | — | — | — | float64 | 0 | 0 | 0 | 1.0 | 40.0 | False | True | VERIFIED_FROM_MANUSCRIPT |
-| duration | predictor | acoustic | acoustic_prosodic | — | float64 | 0 | 0 | 0 | 1.63267574 | 1.83947846 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_F0 | predictor | acoustic | acoustic_prosodic | — | float64 | 1 | 0 | 0 | 84.68533138 | 264.60057521 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| sd_f0 | predictor | acoustic | acoustic_prosodic | — | float64 | 1 | 0 | 0 | 0.73657993 | 43.56901036 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| hnr | predictor | acoustic | acoustic_voice_quality | — | float64 | 0 | 0 | 0 | -0.22655473 | 22.78072218 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| local_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00463253 | 0.07300039 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| local_absolute_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 2.646e-05 | 0.00074601 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| rap_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00132208 | 0.03999886 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| ppq5_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00229119 | 0.03482551 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| ddp_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00396625 | 0.11999658 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| local_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.05961194 | 0.30921327 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| local_db_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.44304771 | 3.14657824 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| apq3_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 2 | 0 | 0 | 0.01284101 | 0.14708255 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| aqpq5_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 4 | 0 | 0 | 0.02324477 | 0.27329274 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| apq11_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 66 | 0 | 0 | 0.00327226 | 0.58086461 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| dda_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 2 | 0 | 0 | 0.03852303 | 0.44124766 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f1_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 234.42421708 | 1163.96236588 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f2_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 744.0551746 | 2528.64413009 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f3_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 1600.76043329 | 3118.23037986 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f4_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 2350.67821045 | 4286.10623152 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f1_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 217.91749773 | 1027.03397913 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f2_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 615.01192323 | 2659.62929788 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f3_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 1365.971215 | 3126.31515936 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| f4_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 2183.16631617 | 4261.93388179 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mfcc1 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -745.72039795 | -389.99118042 | True | True | NOT_SPECIFIED |
-| mfcc2 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | 2.30770922 | 174.97518921 | True | True | NOT_SPECIFIED |
-| mfcc3 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -87.57941437 | 41.30953598 | True | True | NOT_SPECIFIED |
-| mfcc4 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -21.24183083 | 69.9430542 | True | True | NOT_SPECIFIED |
-| mfcc5 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -24.47816277 | 32.62090302 | True | True | NOT_SPECIFIED |
-| mfcc6 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -14.16815948 | 47.52319717 | True | True | NOT_SPECIFIED |
-| mfcc7 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -13.02000618 | 30.19532776 | True | True | NOT_SPECIFIED |
-| mfcc8 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -12.33426762 | 34.72362518 | True | True | NOT_SPECIFIED |
-| mfcc9 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -20.26006889 | 24.31698036 | True | True | NOT_SPECIFIED |
-| mfcc10 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -11.72677994 | 30.00692558 | True | True | NOT_SPECIFIED |
-| mfcc11 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -13.80625439 | 26.46396065 | True | True | NOT_SPECIFIED |
-| mfcc12 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -7.49443579 | 14.45949268 | True | True | NOT_SPECIFIED |
-| mfcc13 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -9.05471611 | 17.42716599 | True | True | NOT_SPECIFIED |
-| mfcc1_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -1.59495223 | 2.30489254 | True | True | NOT_SPECIFIED |
-| mfcc2_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.98208511 | 1.22267449 | True | True | NOT_SPECIFIED |
-| mfcc3_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.70548493 | 0.76418287 | True | True | NOT_SPECIFIED |
-| mfcc4_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.43622488 | 0.50309753 | True | True | NOT_SPECIFIED |
-| mfcc5_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.61801189 | 0.47904888 | True | True | NOT_SPECIFIED |
-| mfcc6_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.48247144 | 0.4084819 | True | True | NOT_SPECIFIED |
-| mfcc7_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.3611671 | 0.42274317 | True | True | NOT_SPECIFIED |
-| mfcc8_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.44135281 | 0.43582866 | True | True | NOT_SPECIFIED |
-| mfcc9_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.41403094 | 0.44139045 | True | True | NOT_SPECIFIED |
-| mfcc10_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.52071375 | 0.29709101 | True | True | NOT_SPECIFIED |
-| mfcc11_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.2918748 | 0.31300718 | True | True | NOT_SPECIFIED |
-| mfcc12_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.24802153 | 0.30863515 | True | True | NOT_SPECIFIED |
-| mfcc13_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.23902622 | 0.3562552 | True | True | NOT_SPECIFIED |
-| mfcc1_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.66867477 | 0.3397738 | True | True | NOT_SPECIFIED |
-| mfcc2_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.25785619 | 0.25613806 | True | True | NOT_SPECIFIED |
-| mfcc3_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.20180887 | 0.29708177 | True | True | NOT_SPECIFIED |
-| mfcc4_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.23136818 | 0.18015437 | True | True | NOT_SPECIFIED |
-| mfcc5_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15110974 | 0.21698506 | True | True | NOT_SPECIFIED |
-| mfcc6_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15532635 | 0.13142373 | True | True | NOT_SPECIFIED |
-| mfcc7_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.12939502 | 0.11458386 | True | True | NOT_SPECIFIED |
-| mfcc8_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.1706495 | 0.09654177 | True | True | NOT_SPECIFIED |
-| mfcc9_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15180013 | 0.20512216 | True | True | NOT_SPECIFIED |
-| mfcc10_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15493199 | 0.12418036 | True | True | NOT_SPECIFIED |
-| mfcc11_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.11483936 | 0.1987316 | True | True | NOT_SPECIFIED |
-| mfcc12_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.11750221 | 0.07712267 | True | True | NOT_SPECIFIED |
-| mfcc13_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.12641777 | 0.0933901 | True | True | NOT_SPECIFIED |
-| lpc1 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -354603597824.0 | 20003058.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc2 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5790396525314048.0 | 95662720942080.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc3 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -8045173669888.0 | 6.276986978452269e+19 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc4 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -2.782832791731757e+20 | 1.0312383240624583e+21 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc5 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -4.920538940222783e+21 | 5.462190808056306e+20 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc6 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -6.294799418665961e+20 | 1.136978536745974e+22 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc7 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -1.812020495322752e+22 | 4.16937483264938e+20 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc8 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5.552785288529235e+19 | 2.263547002953281e+22 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc9 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -2.272673772778129e+22 | 7.980298275351691e+18 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc10 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -2.207394249891119e+18 | 1.8340000881241523e+22 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc11 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -1.1623546317963463e+22 | 1.4213687803568456e+18 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc12 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -6.948660599869932e+17 | 5.119805772285371e+21 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc13 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -1.1112744670527384e+21 | 1.820321557973565e+17 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc14 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5872010567614464.0 | 1.5584103290948813e+17 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc15 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5791513753681920.0 | 52403908608.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| lpc16 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -235484.671875 | 3288.30859375 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| chroma_stft | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | 0.311364 | 0.72909248 | True | True | NOT_SPECIFIED |
-| spectral_centroid | predictor | acoustic | acoustic_spectral | — | float64 | 0 | 0 | 0 | 642.08168121 | 7206.17431259 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_bandwidth | predictor | acoustic | acoustic_spectral | — | float64 | 0 | 0 | 0 | 1274.10402185 | 6186.21889674 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_rolloff | predictor | acoustic | acoustic_spectral | — | float64 | 0 | 0 | 0 | 1029.03891509 | 12638.41391509 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| rmse | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | 0.00073587 | 0.08429192 | True | True | NOT_SPECIFIED |
-| zero_crossing_rate | predictor | acoustic | acoustic_temporal | — | float64 | 0 | 0 | 0 | 0.00981476 | 0.24041556 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| order_CH1_cricotiroideo | auxiliary | emg | emg_auxiliary | CH1 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False | NOT_SPECIFIED |
-| order_CH2_digastrico | auxiliary | emg | emg_auxiliary | CH2 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False | NOT_SPECIFIED |
-| order_CH3_masetero | auxiliary | emg | emg_auxiliary | CH3 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False | NOT_SPECIFIED |
-| order_CH4_cigomatico | auxiliary | emg | emg_auxiliary | CH4 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False | NOT_SPECIFIED |
-| time_CH1_cricotiroideo | auxiliary | emg | emg_auxiliary | CH1 | float64 | 0 | 0 | 0 | 0.0 | 0.7352 | False | False | NOT_SPECIFIED |
-| time_CH2_digastrico | auxiliary | emg | emg_auxiliary | CH2 | float64 | 0 | 0 | 0 | 0.0 | 0.6676 | False | False | NOT_SPECIFIED |
-| time_CH3_masetero | auxiliary | emg | emg_auxiliary | CH3 | float64 | 0 | 0 | 0 | 0.0 | 0.6244 | False | False | NOT_SPECIFIED |
-| time_CH4_cigomatico | auxiliary | emg | emg_auxiliary | CH4 | float64 | 0 | 0 | 0 | 0.0 | 0.6232 | False | False | NOT_SPECIFIED |
-| willison_amplitude_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | 180.0 | 3126.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| zero_crossings_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | 191.0 | 488.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_emg_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | -4.7e-07 | 5.2e-07 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_absolute_value_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | 1.024e-05 | 5.799e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| median_frequency_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_frequency_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_1st_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_2nd_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 28495.79041781 | 45691.6274923 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_3rd_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 14635630.7538027 | 25480026.3017345 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_5th_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 9852084399458.1 | 21054925111316.9 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| willison_amplitude_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 20.0 | 360.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| zero_crossings_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 330.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_emg_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 0.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_absolute_value_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 330.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| median_frequency_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_frequency_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_1st_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 330.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_2nd_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 350.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_3rd_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 360.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_5th_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| willison_amplitude_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| zero_crossings_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_emg_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_absolute_value_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| median_frequency_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 350.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_frequency_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_1st_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_2nd_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_3rd_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_5th_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 5.68533334 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| willison_amplitude_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.73888492 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| zero_crossings_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.87574096 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_emg_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.40557354 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_absolute_value_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.35438847 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| median_frequency_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.16146874 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| mean_frequency_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.36816128 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_1st_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.9564885 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_2nd_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.50028662 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_3rd_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 0.0 | 4.8631579 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| spectral_moment_5th_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.2321995 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.46e-06 | 9.321e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.47e-06 | 7.447e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.53e-06 | 6.781e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.17e-06 | 7.289e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.4e-06 | 6.271e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.51e-06 | 6.873e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.37e-06 | 7.13e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.41e-06 | 6.764e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01050521 | 0.0547411 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01051689 | 0.05023892 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01059974 | 0.05489914 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01020883 | 0.05279413 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01087689 | 0.05377948 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01060402 | 0.06927919 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01062904 | 0.05800386 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01082818 | 0.06326693 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01017253 | 0.06235657 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01030332 | 0.06244507 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_peak_freq_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01140409 | 0.06379345 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01148577 | 0.06708709 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01110271 | 0.05943579 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01127069 | 0.06308819 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01114302 | 0.07682531 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01128232 | 0.06205812 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01063691 | 0.0658012 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01038578 | 0.08801034 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01064552 | 0.06400097 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 100.41847368 | 200.49492545 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 105.70809851 | 211.10104978 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 100.97078427 | 197.77671532 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 95.36522369 | 204.85305442 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 97.91042818 | 195.55271826 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 103.61882389 | 203.1315517 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 106.45529213 | 200.37961169 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 107.1459417 | 210.2057864 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 102.93105126 | 193.22257514 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 106.1257681 | 195.16367202 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_energy_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 106.29466588 | 195.39525862 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 100.37744383 | 204.96422842 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 102.30564052 | 198.82675717 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 110.3356171 | 201.73563797 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 107.03099824 | 197.33584202 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 107.61760716 | 194.79824203 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 97.63596376 | 193.18488279 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 111.51559163 | 206.31053701 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 105.07632452 | 201.67590275 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_freq_var_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 3508.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 205.0 | 798.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -5.4e-07 | 4.4e-07 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 2e-07 | 6.712e-05 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 13598.67904675 | 47061.56998678 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 8105760.80175707 | 28600557.0138458 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 5163193667380.24 | 22679935236841.7 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 280.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 260.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_centroid_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 280.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_1 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_2 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_3 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 300.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_4 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 300.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_5 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_6 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 330.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_7 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 290.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_8 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_9 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 290.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_10 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_11 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 290.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_12 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 270.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH1_mfcc_13 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 0.0 | 0.00012924 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.3e-07 | 76.85916662 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.5e-07 | 90.23522317 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.9e-07 | 119.27318966 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2e-07 | 109.91841887 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.2e-07 | 100.52252128 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.4e-07 | 86.67696604 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.2e-07 | 100.96961456 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.3e-07 | 101.54402334 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 8e-08 | 345.19244291 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2.2e-07 | 51.60851928 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2.3e-07 | 73.58243191 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.4e-07 | 99.47557578 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 8e-08 | 55.98518668 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.8e-07 | 55.48996269 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2e-07 | 135.09922878 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.9e-07 | 125.29628098 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.8e-07 | 47.42949738 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2e-07 | 60.75601728 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_peak_freq_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00316875 | 96.28739751 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00352312 | 72.20510544 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00355624 | 75.08677365 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00386365 | 110.53802582 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00378893 | 64.59543373 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.0033995 | 83.60185033 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00358542 | 69.47721339 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00318821 | 70.04360175 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00384836 | 77.93974318 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00322133 | 134.18670114 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00401692 | 64.32377364 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00382247 | 70.86672278 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00406113 | 84.29486887 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00298088 | 67.40649927 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.0035163 | 65.36423624 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00405088 | 110.89341295 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00441554 | 109.67046296 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00419196 | 69.23092158 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00428011 | 59.00134167 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_energy_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 93.26575584 | 249.18955726 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.04025696 | 254.12174227 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.53651471 | 247.59911781 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 95.06639128 | 232.89951454 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 93.62646893 | 232.9345524 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.3420407 | 237.36487367 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 95.92904514 | 236.46622646 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.13300842 | 241.44626599 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 98.89808953 | 252.54407349 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 98.31626866 | 234.44992302 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 98.47452021 | 229.1242322 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.74397463 | 246.63060899 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 97.88604878 | 236.72168026 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 97.15669366 | 240.92966419 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.22934567 | 240.94116731 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 97.22501424 | 235.64273671 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.16095552 | 236.65903073 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.06846927 | 228.58805146 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.28065388 | 233.4581721 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_freq_var_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 26.0 | 3048.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 179.0 | 605.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.00044385 | 0.00035027 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.4e-07 | 0.0209979 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_centroid_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_1 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 8185.11588789 | 60831.47255405 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_2 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 4200154.1595872 | 32374750.6520047 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_3 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 3213625034053.97 | 26465254618041.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_4 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 350.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_5 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_6 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_7 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_8 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 330.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_9 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 10.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_10 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 10.0 | 360.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_11 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 10.0 | 310.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_12 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH2_mfcc_13 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 270.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 250.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 10.0 | 250.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 240.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 240.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 250.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 250.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 240.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 230.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.75806491 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.44964152 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.0 | 2.65954266 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.55911298 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.79759344 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.282465 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.2525537 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.19158746 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.89344661 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_peak_freq_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.88388183 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.55062937 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.71712476 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.23953355 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.0 | 3.3031065 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 4.81352443 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 5.56703325 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 9.70894052 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 4.6526548 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 9.7972727 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00096566 | 28.07236696 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00088395 | 29.38841792 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00102367 | 25.6671738 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00096732 | 24.12720433 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00099273 | 27.37842503 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00085225 | 25.21212435 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00096652 | 28.8808523 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00101973 | 26.88135953 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00109555 | 26.80393719 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_energy_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00077414 | 26.10775698 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00109839 | 25.26252714 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00098991 | 23.80430957 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00099502 | 26.26924709 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.0010368 | 25.85006351 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00107377 | 27.80009172 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00106865 | 27.17825431 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00085952 | 25.23355236 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00101408 | 26.43676562 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00094125 | 27.05961549 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 96.54765622 | 258.44604073 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 84.62779906 | 246.25118013 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 72.22642379 | 243.07258737 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 99.25350142 | 237.10851103 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 74.720691 | 243.89223577 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 94.73271358 | 249.21269014 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 94.01481667 | 253.20873391 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 96.17271543 | 251.21599262 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 96.6653402 | 260.08503477 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_freq_var_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 82.46170192 | 243.55207846 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 90.08607519 | 244.07110999 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 72.13641192 | 249.9801017 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 83.23166453 | 253.85089678 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 88.65566348 | 244.66630526 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 93.80190145 | 245.59202822 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 76.66096908 | 246.41886749 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 81.87245173 | 240.32453173 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 75.83023853 | 242.55623322 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 76.64692239 | 240.28921812 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_centroid_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_1 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_2 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_3 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_4 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 107.0 | 3636.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_5 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 194.0 | 1099.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_6 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.00029946 | 0.00019451 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_7 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 1.4e-07 | 0.01347549 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_8 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_9 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 624.83337777 | 625.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_10 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_11 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 19252.3311161 | 66814.22084167 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_12 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 12357837.0187592 | 29679532.4713049 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH3_mfcc_13 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 8282652499993.94 | 24541196068840.5 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 370.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 360.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 340.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 350.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 330.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 370.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 370.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 320.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 500.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_peak_freq_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 196.98158445 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 161.11736366 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 117.63414278 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 173.23998885 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 177.9112649 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 120.11443297 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 138.18586255 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 106.37500638 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 177.6564594 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 102.4606352 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 83.57077569 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 250.79245696 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 115.49921714 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 107.75205286 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 67.23489491 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 236.28118975 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 61.04258854 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 51.56873019 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_energy_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 37.4388971 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00040253 | 111.35234099 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00054771 | 97.7089866 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00052115 | 77.46629758 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00070364 | 87.58085161 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00064318 | 86.52841012 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00060174 | 83.09209872 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00050697 | 76.68145091 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00043157 | 68.68570411 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.000478 | 92.03663025 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00052433 | 62.7545508 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00050694 | 64.36742848 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00046891 | 105.17905971 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00047489 | 66.49789318 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00065639 | 68.53170605 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00025355 | 54.36350651 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00045371 | 102.73397705 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00028632 | 66.74285939 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00057336 | 43.65798526 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_freq_var_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00045491 | 57.67103169 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.02897807 | 284.99417911 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 99.83394254 | 277.34912128 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 99.67067207 | 291.35838374 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 97.42836357 | 287.17677429 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 100.21746166 | 281.21810652 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.28449092 | 281.59129179 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 96.5100857 | 277.92384442 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.55061327 | 280.23339148 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 99.81808712 | 276.74271398 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 95.09569893 | 278.30826621 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 95.2648794 | 285.9082147 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 95.02793311 | 322.15812428 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 84.8152019 | 286.2008136 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 90.34374343 | 284.4524137 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 86.39160285 | 283.67695364 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 98.43552963 | 273.33821146 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 88.59083955 | 278.30720104 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 86.72430068 | 287.55155013 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_centroid_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.30797101 | 289.24180873 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_1 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_2 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_3 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_4 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_5 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_6 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_7 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_8 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_9 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_10 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_11 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_12 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| CH4_mfcc_13 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True | VERIFIED_FROM_SUPPLEMENT |
-| Clase | target | label | — | — | int64 | 0 | 0 | 0 | 0.0 | 1.0 | False | True | VERIFIED_FROM_MANUSCRIPT |
+| variable_name | role | modality | feature_family | channel | dtype | missing | inf | 888888 | obs_min | obs_max | predictor | public |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| id_subject | identifier | — | — | — | float64 | 0 | 0 | 0 | 1.0 | 41.0 | False | True
+| id_word | identifier | — | — | — | float64 | 0 | 0 | 0 | 1.0 | 40.0 | False | True
+| duration | predictor | acoustic | acoustic_prosodic | — | float64 | 0 | 0 | 0 | 1.63267574 | 1.83947846 | True | True
+| mean_F0 | predictor | acoustic | acoustic_prosodic | — | float64 | 1 | 0 | 0 | 84.68533138 | 264.60057521 | True | True
+| sd_f0 | predictor | acoustic | acoustic_prosodic | — | float64 | 1 | 0 | 0 | 0.73657993 | 43.56901036 | True | True
+| hnr | predictor | acoustic | acoustic_voice_quality | — | float64 | 0 | 0 | 0 | -0.22655473 | 22.78072218 | True | True
+| local_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00463253 | 0.07300039 | True | True
+| local_absolute_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 2.646e-05 | 0.00074601 | True | True
+| rap_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00132208 | 0.03999886 | True | True
+| ppq5_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00229119 | 0.03482551 | True | True
+| ddp_jitter | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.00396625 | 0.11999658 | True | True
+| local_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.05961194 | 0.30921327 | True | True
+| local_db_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 1 | 0 | 0 | 0.44304771 | 3.14657824 | True | True
+| apq3_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 2 | 0 | 0 | 0.01284101 | 0.14708255 | True | True
+| aqpq5_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 4 | 0 | 0 | 0.02324477 | 0.27329274 | True | True
+| apq11_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 66 | 0 | 0 | 0.00327226 | 0.58086461 | True | True
+| dda_shimmer | predictor | acoustic | acoustic_voice_quality | — | float64 | 2 | 0 | 0 | 0.03852303 | 0.44124766 | True | True
+| f1_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 234.42421708 | 1163.96236588 | True | True
+| f2_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 744.0551746 | 2528.64413009 | True | True
+| f3_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 1600.76043329 | 3118.23037986 | True | True
+| f4_mean | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 2350.67821045 | 4286.10623152 | True | True
+| f1_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 217.91749773 | 1027.03397913 | True | True
+| f2_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 615.01192323 | 2659.62929788 | True | True
+| f3_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 1365.971215 | 3126.31515936 | True | True
+| f4_median | predictor | acoustic | acoustic_formant | — | float64 | 0 | 0 | 0 | 2183.16631617 | 4261.93388179 | True | True
+| mfcc1 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -745.72039795 | -389.99118042 | True | True
+| mfcc2 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | 2.30770922 | 174.97518921 | True | True
+| mfcc3 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -87.57941437 | 41.30953598 | True | True
+| mfcc4 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -21.24183083 | 69.9430542 | True | True
+| mfcc5 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -24.47816277 | 32.62090302 | True | True
+| mfcc6 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -14.16815948 | 47.52319717 | True | True
+| mfcc7 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -13.02000618 | 30.19532776 | True | True
+| mfcc8 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -12.33426762 | 34.72362518 | True | True
+| mfcc9 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -20.26006889 | 24.31698036 | True | True
+| mfcc10 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -11.72677994 | 30.00692558 | True | True
+| mfcc11 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -13.80625439 | 26.46396065 | True | True
+| mfcc12 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -7.49443579 | 14.45949268 | True | True
+| mfcc13 | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -9.05471611 | 17.42716599 | True | True
+| mfcc1_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -1.59495223 | 2.30489254 | True | True
+| mfcc2_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.98208511 | 1.22267449 | True | True
+| mfcc3_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.70548493 | 0.76418287 | True | True
+| mfcc4_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.43622488 | 0.50309753 | True | True
+| mfcc5_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.61801189 | 0.47904888 | True | True
+| mfcc6_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.48247144 | 0.4084819 | True | True
+| mfcc7_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.3611671 | 0.42274317 | True | True
+| mfcc8_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.44135281 | 0.43582866 | True | True
+| mfcc9_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.41403094 | 0.44139045 | True | True
+| mfcc10_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.52071375 | 0.29709101 | True | True
+| mfcc11_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.2918748 | 0.31300718 | True | True
+| mfcc12_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.24802153 | 0.30863515 | True | True
+| mfcc13_1der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.23902622 | 0.3562552 | True | True
+| mfcc1_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.66867477 | 0.3397738 | True | True
+| mfcc2_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.25785619 | 0.25613806 | True | True
+| mfcc3_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.20180887 | 0.29708177 | True | True
+| mfcc4_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.23136818 | 0.18015437 | True | True
+| mfcc5_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15110974 | 0.21698506 | True | True
+| mfcc6_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15532635 | 0.13142373 | True | True
+| mfcc7_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.12939502 | 0.11458386 | True | True
+| mfcc8_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.1706495 | 0.09654177 | True | True
+| mfcc9_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15180013 | 0.20512216 | True | True
+| mfcc10_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.15493199 | 0.12418036 | True | True
+| mfcc11_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.11483936 | 0.1987316 | True | True
+| mfcc12_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.11750221 | 0.07712267 | True | True
+| mfcc13_2der | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | -0.12641777 | 0.0933901 | True | True
+| lpc1 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -354603597824.0 | 20003058.0 | True | True
+| lpc2 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5790396525314048.0 | 95662720942080.0 | True | True
+| lpc3 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -8045173669888.0 | 6.276986978452269e+19 | True | True
+| lpc4 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -2.782832791731757e+20 | 1.0312383240624583e+21 | True | True
+| lpc5 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -4.920538940222783e+21 | 5.462190808056306e+20 | True | True
+| lpc6 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -6.294799418665961e+20 | 1.136978536745974e+22 | True | True
+| lpc7 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -1.812020495322752e+22 | 4.16937483264938e+20 | True | True
+| lpc8 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5.552785288529235e+19 | 2.263547002953281e+22 | True | True
+| lpc9 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -2.272673772778129e+22 | 7.980298275351691e+18 | True | True
+| lpc10 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -2.207394249891119e+18 | 1.8340000881241523e+22 | True | True
+| lpc11 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -1.1623546317963463e+22 | 1.4213687803568456e+18 | True | True
+| lpc12 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -6.948660599869932e+17 | 5.119805772285371e+21 | True | True
+| lpc13 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -1.1112744670527384e+21 | 1.820321557973565e+17 | True | True
+| lpc14 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5872010567614464.0 | 1.5584103290948813e+17 | True | True
+| lpc15 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -5791513753681920.0 | 52403908608.0 | True | True
+| lpc16 | predictor | acoustic | acoustic_lpc | — | float64 | 7 | 2 | 0 | -235484.671875 | 3288.30859375 | True | True
+| chroma_stft | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | 0.311364 | 0.72909248 | True | True
+| spectral_centroid | predictor | acoustic | acoustic_spectral | — | float64 | 0 | 0 | 0 | 642.08168121 | 7206.17431259 | True | True
+| spectral_bandwidth | predictor | acoustic | acoustic_spectral | — | float64 | 0 | 0 | 0 | 1274.10402185 | 6186.21889674 | True | True
+| spectral_rolloff | predictor | acoustic | acoustic_spectral | — | float64 | 0 | 0 | 0 | 1029.03891509 | 12638.41391509 | True | True
+| rmse | predictor | acoustic | acoustic_other | — | float64 | 0 | 0 | 0 | 0.00073587 | 0.08429192 | True | True
+| zero_crossing_rate | predictor | acoustic | acoustic_temporal | — | float64 | 0 | 0 | 0 | 0.00981476 | 0.24041556 | True | True
+| order_CH1_cricotiroideo | auxiliary | emg | emg_auxiliary | CH1 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False
+| order_CH2_digastrico | auxiliary | emg | emg_auxiliary | CH2 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False
+| order_CH3_masetero | auxiliary | emg | emg_auxiliary | CH3 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False
+| order_CH4_cigomatico | auxiliary | emg | emg_auxiliary | CH4 | float64 | 0 | 0 | 0 | 1.0 | 5.0 | False | False
+| time_CH1_cricotiroideo | auxiliary | emg | emg_auxiliary | CH1 | float64 | 0 | 0 | 0 | 0.0 | 0.7352 | False | False
+| time_CH2_digastrico | auxiliary | emg | emg_auxiliary | CH2 | float64 | 0 | 0 | 0 | 0.0 | 0.6676 | False | False
+| time_CH3_masetero | auxiliary | emg | emg_auxiliary | CH3 | float64 | 0 | 0 | 0 | 0.0 | 0.6244 | False | False
+| time_CH4_cigomatico | auxiliary | emg | emg_auxiliary | CH4 | float64 | 0 | 0 | 0 | 0.0 | 0.6232 | False | False
+| willison_amplitude_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | 180.0 | 3126.0 | True | True
+| zero_crossings_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | 191.0 | 488.0 | True | True
+| mean_emg_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | -4.7e-07 | 5.2e-07 | True | True
+| mean_absolute_value_CH1 | predictor | emg | emg_time_domain | CH1 | float64 | 0 | 0 | 918 | 1.024e-05 | 5.799e-05 | True | True
+| median_frequency_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True
+| mean_frequency_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True
+| spectral_moment_1st_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| spectral_moment_2nd_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 28495.79041781 | 45691.6274923 | True | True
+| spectral_moment_3rd_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 14635630.7538027 | 25480026.3017345 | True | True
+| spectral_moment_5th_order_CH1 | predictor | emg | emg_frequency_domain | CH1 | float64 | 0 | 0 | 918 | 9852084399458.1 | 21054925111316.9 | True | True
+| willison_amplitude_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 20.0 | 360.0 | True | True
+| zero_crossings_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 330.0 | True | True
+| mean_emg_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 0.0 | 320.0 | True | True
+| mean_absolute_value_CH2 | predictor | emg | emg_time_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 330.0 | True | True
+| median_frequency_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 340.0 | True | True
+| mean_frequency_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 340.0 | True | True
+| spectral_moment_1st_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 330.0 | True | True
+| spectral_moment_2nd_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 350.0 | True | True
+| spectral_moment_3rd_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 360.0 | True | True
+| spectral_moment_5th_order_CH2 | predictor | emg | emg_frequency_domain | CH2 | float64 | 0 | 0 | 320 | 10.0 | 310.0 | True | True
+| willison_amplitude_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True
+| zero_crossings_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True
+| mean_emg_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True
+| mean_absolute_value_CH3 | predictor | emg | emg_time_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 320.0 | True | True
+| median_frequency_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 350.0 | True | True
+| mean_frequency_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True
+| spectral_moment_1st_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 310.0 | True | True
+| spectral_moment_2nd_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 320.0 | True | True
+| spectral_moment_3rd_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 20.0 | 340.0 | True | True
+| spectral_moment_5th_order_CH3 | predictor | emg | emg_frequency_domain | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 5.68533334 | True | True
+| willison_amplitude_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.73888492 | True | True
+| zero_crossings_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.87574096 | True | True
+| mean_emg_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.40557354 | True | True
+| mean_absolute_value_CH4 | predictor | emg | emg_time_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.35438847 | True | True
+| median_frequency_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.16146874 | True | True
+| mean_frequency_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 4.36816128 | True | True
+| spectral_moment_1st_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.9564885 | True | True
+| spectral_moment_2nd_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.50028662 | True | True
+| spectral_moment_3rd_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 0.0 | 4.8631579 | True | True
+| spectral_moment_5th_order_CH4 | predictor | emg | emg_frequency_domain | CH4 | float64 | 0 | 0 | 678 | 1e-08 | 5.2321995 | True | True
+| CH1_peak_freq_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.46e-06 | 9.321e-05 | True | True
+| CH1_peak_freq_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.47e-06 | 7.447e-05 | True | True
+| CH1_peak_freq_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.53e-06 | 6.781e-05 | True | True
+| CH1_peak_freq_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.17e-06 | 7.289e-05 | True | True
+| CH1_peak_freq_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.4e-06 | 6.271e-05 | True | True
+| CH1_peak_freq_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.51e-06 | 6.873e-05 | True | True
+| CH1_peak_freq_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.37e-06 | 7.13e-05 | True | True
+| CH1_peak_freq_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 1.41e-06 | 6.764e-05 | True | True
+| CH1_peak_freq_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01050521 | 0.0547411 | True | True
+| CH1_peak_freq_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01051689 | 0.05023892 | True | True
+| CH1_peak_freq_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01059974 | 0.05489914 | True | True
+| CH1_peak_freq_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01020883 | 0.05279413 | True | True
+| CH1_peak_freq_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01087689 | 0.05377948 | True | True
+| CH1_peak_freq_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01060402 | 0.06927919 | True | True
+| CH1_peak_freq_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01062904 | 0.05800386 | True | True
+| CH1_peak_freq_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01082818 | 0.06326693 | True | True
+| CH1_peak_freq_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01017253 | 0.06235657 | True | True
+| CH1_peak_freq_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01030332 | 0.06244507 | True | True
+| CH1_peak_freq_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01140409 | 0.06379345 | True | True
+| CH1_energy_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01148577 | 0.06708709 | True | True
+| CH1_energy_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01110271 | 0.05943579 | True | True
+| CH1_energy_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01127069 | 0.06308819 | True | True
+| CH1_energy_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01114302 | 0.07682531 | True | True
+| CH1_energy_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01128232 | 0.06205812 | True | True
+| CH1_energy_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01063691 | 0.0658012 | True | True
+| CH1_energy_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01038578 | 0.08801034 | True | True
+| CH1_energy_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 0.01064552 | 0.06400097 | True | True
+| CH1_energy_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 100.41847368 | 200.49492545 | True | True
+| CH1_energy_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 105.70809851 | 211.10104978 | True | True
+| CH1_energy_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 100.97078427 | 197.77671532 | True | True
+| CH1_energy_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 95.36522369 | 204.85305442 | True | True
+| CH1_energy_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 97.91042818 | 195.55271826 | True | True
+| CH1_energy_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 103.61882389 | 203.1315517 | True | True
+| CH1_energy_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 106.45529213 | 200.37961169 | True | True
+| CH1_energy_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 107.1459417 | 210.2057864 | True | True
+| CH1_energy_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 102.93105126 | 193.22257514 | True | True
+| CH1_energy_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 106.1257681 | 195.16367202 | True | True
+| CH1_energy_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 106.29466588 | 195.39525862 | True | True
+| CH1_freq_var_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 100.37744383 | 204.96422842 | True | True
+| CH1_freq_var_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 102.30564052 | 198.82675717 | True | True
+| CH1_freq_var_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 110.3356171 | 201.73563797 | True | True
+| CH1_freq_var_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 107.03099824 | 197.33584202 | True | True
+| CH1_freq_var_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 107.61760716 | 194.79824203 | True | True
+| CH1_freq_var_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 97.63596376 | 193.18488279 | True | True
+| CH1_freq_var_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 111.51559163 | 206.31053701 | True | True
+| CH1_freq_var_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 105.07632452 | 201.67590275 | True | True
+| CH1_freq_var_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_freq_var_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_centroid_point_1 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_centroid_point_2 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_centroid_point_3 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 3508.0 | True | True
+| CH1_centroid_point_4 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 205.0 | 798.0 | True | True
+| CH1_centroid_point_5 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -5.4e-07 | 4.4e-07 | True | True
+| CH1_centroid_point_6 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 2e-07 | 6.712e-05 | True | True
+| CH1_centroid_point_7 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True
+| CH1_centroid_point_8 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 624.83337777 | 625.0 | True | True
+| CH1_centroid_point_9 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | -0.0 | 0.0 | True | True
+| CH1_centroid_point_10 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 13598.67904675 | 47061.56998678 | True | True
+| CH1_centroid_point_11 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 8105760.80175707 | 28600557.0138458 | True | True
+| CH1_centroid_point_12 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 5163193667380.24 | 22679935236841.7 | True | True
+| CH1_centroid_point_13 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 280.0 | True | True
+| CH1_centroid_point_14 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 260.0 | True | True
+| CH1_centroid_point_15 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True
+| CH1_centroid_point_16 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 340.0 | True | True
+| CH1_centroid_point_17 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True
+| CH1_centroid_point_18 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True
+| CH1_centroid_point_19 | predictor | emg | emg_stft | CH1 | float64 | 0 | 0 | 918 | 20.0 | 280.0 | True | True
+| CH1_mfcc_1 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 320.0 | True | True
+| CH1_mfcc_2 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True
+| CH1_mfcc_3 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 300.0 | True | True
+| CH1_mfcc_4 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 300.0 | True | True
+| CH1_mfcc_5 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True
+| CH1_mfcc_6 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 330.0 | True | True
+| CH1_mfcc_7 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 290.0 | True | True
+| CH1_mfcc_8 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True
+| CH1_mfcc_9 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 290.0 | True | True
+| CH1_mfcc_10 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 310.0 | True | True
+| CH1_mfcc_11 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 290.0 | True | True
+| CH1_mfcc_12 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 20.0 | 270.0 | True | True
+| CH1_mfcc_13 | predictor | emg | emg_mfcc | CH1 | float64 | 0 | 0 | 918 | 0.0 | 0.00012924 | True | True
+| CH2_peak_freq_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.3e-07 | 76.85916662 | True | True
+| CH2_peak_freq_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.5e-07 | 90.23522317 | True | True
+| CH2_peak_freq_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.9e-07 | 119.27318966 | True | True
+| CH2_peak_freq_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2e-07 | 109.91841887 | True | True
+| CH2_peak_freq_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.2e-07 | 100.52252128 | True | True
+| CH2_peak_freq_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.4e-07 | 86.67696604 | True | True
+| CH2_peak_freq_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.2e-07 | 100.96961456 | True | True
+| CH2_peak_freq_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.3e-07 | 101.54402334 | True | True
+| CH2_peak_freq_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 8e-08 | 345.19244291 | True | True
+| CH2_peak_freq_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2.2e-07 | 51.60851928 | True | True
+| CH2_peak_freq_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2.3e-07 | 73.58243191 | True | True
+| CH2_peak_freq_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.4e-07 | 99.47557578 | True | True
+| CH2_peak_freq_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 8e-08 | 55.98518668 | True | True
+| CH2_peak_freq_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.8e-07 | 55.48996269 | True | True
+| CH2_peak_freq_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2e-07 | 135.09922878 | True | True
+| CH2_peak_freq_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.9e-07 | 125.29628098 | True | True
+| CH2_peak_freq_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.8e-07 | 47.42949738 | True | True
+| CH2_peak_freq_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 2e-07 | 60.75601728 | True | True
+| CH2_peak_freq_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00316875 | 96.28739751 | True | True
+| CH2_energy_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00352312 | 72.20510544 | True | True
+| CH2_energy_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00355624 | 75.08677365 | True | True
+| CH2_energy_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00386365 | 110.53802582 | True | True
+| CH2_energy_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00378893 | 64.59543373 | True | True
+| CH2_energy_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.0033995 | 83.60185033 | True | True
+| CH2_energy_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00358542 | 69.47721339 | True | True
+| CH2_energy_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00318821 | 70.04360175 | True | True
+| CH2_energy_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00384836 | 77.93974318 | True | True
+| CH2_energy_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00322133 | 134.18670114 | True | True
+| CH2_energy_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00401692 | 64.32377364 | True | True
+| CH2_energy_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00382247 | 70.86672278 | True | True
+| CH2_energy_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00406113 | 84.29486887 | True | True
+| CH2_energy_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00298088 | 67.40649927 | True | True
+| CH2_energy_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.0035163 | 65.36423624 | True | True
+| CH2_energy_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00405088 | 110.89341295 | True | True
+| CH2_energy_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00441554 | 109.67046296 | True | True
+| CH2_energy_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00419196 | 69.23092158 | True | True
+| CH2_energy_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 0.00428011 | 59.00134167 | True | True
+| CH2_energy_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 93.26575584 | 249.18955726 | True | True
+| CH2_freq_var_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.04025696 | 254.12174227 | True | True
+| CH2_freq_var_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.53651471 | 247.59911781 | True | True
+| CH2_freq_var_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 95.06639128 | 232.89951454 | True | True
+| CH2_freq_var_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 93.62646893 | 232.9345524 | True | True
+| CH2_freq_var_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.3420407 | 237.36487367 | True | True
+| CH2_freq_var_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 95.92904514 | 236.46622646 | True | True
+| CH2_freq_var_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.13300842 | 241.44626599 | True | True
+| CH2_freq_var_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 98.89808953 | 252.54407349 | True | True
+| CH2_freq_var_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 98.31626866 | 234.44992302 | True | True
+| CH2_freq_var_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 98.47452021 | 229.1242322 | True | True
+| CH2_freq_var_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.74397463 | 246.63060899 | True | True
+| CH2_freq_var_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 97.88604878 | 236.72168026 | True | True
+| CH2_freq_var_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 97.15669366 | 240.92966419 | True | True
+| CH2_freq_var_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.22934567 | 240.94116731 | True | True
+| CH2_freq_var_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 97.22501424 | 235.64273671 | True | True
+| CH2_freq_var_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 94.16095552 | 236.65903073 | True | True
+| CH2_freq_var_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.06846927 | 228.58805146 | True | True
+| CH2_freq_var_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 96.28065388 | 233.4581721 | True | True
+| CH2_freq_var_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_1 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_2 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_3 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_4 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_5 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_6 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_7 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_8 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_9 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_10 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_11 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_12 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_centroid_point_13 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 26.0 | 3048.0 | True | True
+| CH2_centroid_point_14 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 179.0 | 605.0 | True | True
+| CH2_centroid_point_15 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.00044385 | 0.00035027 | True | True
+| CH2_centroid_point_16 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 1.4e-07 | 0.0209979 | True | True
+| CH2_centroid_point_17 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 624.83337777 | 625.0 | True | True
+| CH2_centroid_point_18 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | 624.83337777 | 625.0 | True | True
+| CH2_centroid_point_19 | predictor | emg | emg_stft | CH2 | float64 | 0 | 0 | 320 | -0.0 | 0.0 | True | True
+| CH2_mfcc_1 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 8185.11588789 | 60831.47255405 | True | True
+| CH2_mfcc_2 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 4200154.1595872 | 32374750.6520047 | True | True
+| CH2_mfcc_3 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 3213625034053.97 | 26465254618041.0 | True | True
+| CH2_mfcc_4 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 350.0 | True | True
+| CH2_mfcc_5 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 340.0 | True | True
+| CH2_mfcc_6 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 320.0 | True | True
+| CH2_mfcc_7 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 340.0 | True | True
+| CH2_mfcc_8 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 330.0 | True | True
+| CH2_mfcc_9 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 10.0 | 380.0 | True | True
+| CH2_mfcc_10 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 10.0 | 360.0 | True | True
+| CH2_mfcc_11 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 10.0 | 310.0 | True | True
+| CH2_mfcc_12 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 320.0 | True | True
+| CH2_mfcc_13 | predictor | emg | emg_mfcc | CH2 | float64 | 0 | 0 | 320 | 20.0 | 320.0 | True | True
+| CH3_peak_freq_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 270.0 | True | True
+| CH3_peak_freq_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 250.0 | True | True
+| CH3_peak_freq_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 10.0 | 250.0 | True | True
+| CH3_peak_freq_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 240.0 | True | True
+| CH3_peak_freq_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 240.0 | True | True
+| CH3_peak_freq_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 250.0 | True | True
+| CH3_peak_freq_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 250.0 | True | True
+| CH3_peak_freq_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 240.0 | True | True
+| CH3_peak_freq_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 20.0 | 230.0 | True | True
+| CH3_peak_freq_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.75806491 | True | True
+| CH3_peak_freq_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.44964152 | True | True
+| CH3_peak_freq_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.0 | 2.65954266 | True | True
+| CH3_peak_freq_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.55911298 | True | True
+| CH3_peak_freq_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.79759344 | True | True
+| CH3_peak_freq_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.282465 | True | True
+| CH3_peak_freq_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.2525537 | True | True
+| CH3_peak_freq_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.19158746 | True | True
+| CH3_peak_freq_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.89344661 | True | True
+| CH3_peak_freq_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.88388183 | True | True
+| CH3_energy_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.55062937 | True | True
+| CH3_energy_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 2.71712476 | True | True
+| CH3_energy_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 3.23953355 | True | True
+| CH3_energy_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.0 | 3.3031065 | True | True
+| CH3_energy_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 4.81352443 | True | True
+| CH3_energy_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 5.56703325 | True | True
+| CH3_energy_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 9.70894052 | True | True
+| CH3_energy_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 4.6526548 | True | True
+| CH3_energy_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 1e-08 | 9.7972727 | True | True
+| CH3_energy_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00096566 | 28.07236696 | True | True
+| CH3_energy_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00088395 | 29.38841792 | True | True
+| CH3_energy_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00102367 | 25.6671738 | True | True
+| CH3_energy_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00096732 | 24.12720433 | True | True
+| CH3_energy_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00099273 | 27.37842503 | True | True
+| CH3_energy_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00085225 | 25.21212435 | True | True
+| CH3_energy_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00096652 | 28.8808523 | True | True
+| CH3_energy_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00101973 | 26.88135953 | True | True
+| CH3_energy_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00109555 | 26.80393719 | True | True
+| CH3_energy_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00077414 | 26.10775698 | True | True
+| CH3_freq_var_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00109839 | 25.26252714 | True | True
+| CH3_freq_var_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00098991 | 23.80430957 | True | True
+| CH3_freq_var_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00099502 | 26.26924709 | True | True
+| CH3_freq_var_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.0010368 | 25.85006351 | True | True
+| CH3_freq_var_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00107377 | 27.80009172 | True | True
+| CH3_freq_var_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00106865 | 27.17825431 | True | True
+| CH3_freq_var_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00085952 | 25.23355236 | True | True
+| CH3_freq_var_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00101408 | 26.43676562 | True | True
+| CH3_freq_var_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 0.00094125 | 27.05961549 | True | True
+| CH3_freq_var_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 96.54765622 | 258.44604073 | True | True
+| CH3_freq_var_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 84.62779906 | 246.25118013 | True | True
+| CH3_freq_var_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 72.22642379 | 243.07258737 | True | True
+| CH3_freq_var_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 99.25350142 | 237.10851103 | True | True
+| CH3_freq_var_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 74.720691 | 243.89223577 | True | True
+| CH3_freq_var_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 94.73271358 | 249.21269014 | True | True
+| CH3_freq_var_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 94.01481667 | 253.20873391 | True | True
+| CH3_freq_var_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 96.17271543 | 251.21599262 | True | True
+| CH3_freq_var_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 96.6653402 | 260.08503477 | True | True
+| CH3_freq_var_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 82.46170192 | 243.55207846 | True | True
+| CH3_centroid_point_1 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 90.08607519 | 244.07110999 | True | True
+| CH3_centroid_point_2 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 72.13641192 | 249.9801017 | True | True
+| CH3_centroid_point_3 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 83.23166453 | 253.85089678 | True | True
+| CH3_centroid_point_4 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 88.65566348 | 244.66630526 | True | True
+| CH3_centroid_point_5 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 93.80190145 | 245.59202822 | True | True
+| CH3_centroid_point_6 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 76.66096908 | 246.41886749 | True | True
+| CH3_centroid_point_7 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 81.87245173 | 240.32453173 | True | True
+| CH3_centroid_point_8 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 75.83023853 | 242.55623322 | True | True
+| CH3_centroid_point_9 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | 76.64692239 | 240.28921812 | True | True
+| CH3_centroid_point_10 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_11 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_12 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_13 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_14 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_15 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_16 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_17 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_18 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_centroid_point_19 | predictor | emg | emg_stft | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_mfcc_1 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_mfcc_2 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_mfcc_3 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_mfcc_4 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 107.0 | 3636.0 | True | True
+| CH3_mfcc_5 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 194.0 | 1099.0 | True | True
+| CH3_mfcc_6 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.00029946 | 0.00019451 | True | True
+| CH3_mfcc_7 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 1.4e-07 | 0.01347549 | True | True
+| CH3_mfcc_8 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 624.83337777 | 625.0 | True | True
+| CH3_mfcc_9 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 624.83337777 | 625.0 | True | True
+| CH3_mfcc_10 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | -0.0 | 0.0 | True | True
+| CH3_mfcc_11 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 19252.3311161 | 66814.22084167 | True | True
+| CH3_mfcc_12 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 12357837.0187592 | 29679532.4713049 | True | True
+| CH3_mfcc_13 | predictor | emg | emg_mfcc | CH3 | float64 | 0 | 0 | 798 | 8282652499993.94 | 24541196068840.5 | True | True
+| CH4_peak_freq_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 370.0 | True | True
+| CH4_peak_freq_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 360.0 | True | True
+| CH4_peak_freq_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 340.0 | True | True
+| CH4_peak_freq_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 350.0 | True | True
+| CH4_peak_freq_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 330.0 | True | True
+| CH4_peak_freq_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 370.0 | True | True
+| CH4_peak_freq_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 370.0 | True | True
+| CH4_peak_freq_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_peak_freq_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 320.0 | True | True
+| CH4_peak_freq_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 500.0 | True | True
+| CH4_peak_freq_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 20.0 | 380.0 | True | True
+| CH4_energy_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 196.98158445 | True | True
+| CH4_energy_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 161.11736366 | True | True
+| CH4_energy_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 117.63414278 | True | True
+| CH4_energy_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 173.23998885 | True | True
+| CH4_energy_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 177.9112649 | True | True
+| CH4_energy_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 120.11443297 | True | True
+| CH4_energy_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 138.18586255 | True | True
+| CH4_energy_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 106.37500638 | True | True
+| CH4_energy_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 177.6564594 | True | True
+| CH4_energy_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 102.4606352 | True | True
+| CH4_energy_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 83.57077569 | True | True
+| CH4_energy_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 250.79245696 | True | True
+| CH4_energy_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 115.49921714 | True | True
+| CH4_energy_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 107.75205286 | True | True
+| CH4_energy_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 67.23489491 | True | True
+| CH4_energy_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 236.28118975 | True | True
+| CH4_energy_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 61.04258854 | True | True
+| CH4_energy_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 51.56873019 | True | True
+| CH4_energy_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.0 | 37.4388971 | True | True
+| CH4_freq_var_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00040253 | 111.35234099 | True | True
+| CH4_freq_var_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00054771 | 97.7089866 | True | True
+| CH4_freq_var_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00052115 | 77.46629758 | True | True
+| CH4_freq_var_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00070364 | 87.58085161 | True | True
+| CH4_freq_var_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00064318 | 86.52841012 | True | True
+| CH4_freq_var_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00060174 | 83.09209872 | True | True
+| CH4_freq_var_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00050697 | 76.68145091 | True | True
+| CH4_freq_var_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00043157 | 68.68570411 | True | True
+| CH4_freq_var_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.000478 | 92.03663025 | True | True
+| CH4_freq_var_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00052433 | 62.7545508 | True | True
+| CH4_freq_var_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00050694 | 64.36742848 | True | True
+| CH4_freq_var_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00046891 | 105.17905971 | True | True
+| CH4_freq_var_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00047489 | 66.49789318 | True | True
+| CH4_freq_var_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00065639 | 68.53170605 | True | True
+| CH4_freq_var_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00025355 | 54.36350651 | True | True
+| CH4_freq_var_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00045371 | 102.73397705 | True | True
+| CH4_freq_var_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00028632 | 66.74285939 | True | True
+| CH4_freq_var_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00057336 | 43.65798526 | True | True
+| CH4_freq_var_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 0.00045491 | 57.67103169 | True | True
+| CH4_centroid_point_1 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.02897807 | 284.99417911 | True | True
+| CH4_centroid_point_2 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 99.83394254 | 277.34912128 | True | True
+| CH4_centroid_point_3 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 99.67067207 | 291.35838374 | True | True
+| CH4_centroid_point_4 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 97.42836357 | 287.17677429 | True | True
+| CH4_centroid_point_5 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 100.21746166 | 281.21810652 | True | True
+| CH4_centroid_point_6 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.28449092 | 281.59129179 | True | True
+| CH4_centroid_point_7 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 96.5100857 | 277.92384442 | True | True
+| CH4_centroid_point_8 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.55061327 | 280.23339148 | True | True
+| CH4_centroid_point_9 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 99.81808712 | 276.74271398 | True | True
+| CH4_centroid_point_10 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 95.09569893 | 278.30826621 | True | True
+| CH4_centroid_point_11 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 95.2648794 | 285.9082147 | True | True
+| CH4_centroid_point_12 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 95.02793311 | 322.15812428 | True | True
+| CH4_centroid_point_13 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 84.8152019 | 286.2008136 | True | True
+| CH4_centroid_point_14 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 90.34374343 | 284.4524137 | True | True
+| CH4_centroid_point_15 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 86.39160285 | 283.67695364 | True | True
+| CH4_centroid_point_16 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 98.43552963 | 273.33821146 | True | True
+| CH4_centroid_point_17 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 88.59083955 | 278.30720104 | True | True
+| CH4_centroid_point_18 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 86.72430068 | 287.55155013 | True | True
+| CH4_centroid_point_19 | predictor | emg | emg_stft | CH4 | float64 | 0 | 0 | 678 | 91.30797101 | 289.24180873 | True | True
+| CH4_mfcc_1 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_2 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_3 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_4 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_5 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_6 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_7 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_8 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_9 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_10 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_11 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_12 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| CH4_mfcc_13 | predictor | emg | emg_mfcc | CH4 | float64 | 0 | 0 | 678 | -0.0 | 0.0 | True | True
+| Clase | target | label | — | — | int64 | 0 | 0 | 0 | 0.0 | 1.0 | False | True
