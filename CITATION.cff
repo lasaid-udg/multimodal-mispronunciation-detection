@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+message: >
+  If you use this code or dataset in your research, please cite the associated
+  paper using the metadata below. The citation will be updated upon acceptance.
+title: >
+  md-emg: Reproducible ML Pipeline for Multimodal English Mispronunciation
+  Detection (Acoustic + Surface EMG)
+abstract: >
+  Companion code and derived tabular dataset for the paper "A Multimodal
+  Machine Learning Approach to English Mispronunciation Detection Using Acoustic
+  and Surface Electromyographic Signals". Provides a leakage-safe nested
+  cross-validation pipeline (5×3×10, StratifiedGroupKFold, 7 classifiers),
+  participant-cluster bootstrap confidence intervals, paired permutation tests,
+  and Benjamini-Hochberg FDR correction across 20 experimental scenarios.
+version: 0.3.5.1
+date-released: "2026-11-08"
+license: TBD
+repository-code: https://github.com/placeholder/md-emg
+keywords:
+  - mispronunciation detection
+  - surface electromyography
+  - acoustic features
+  - machine learning
+  - nested cross-validation
+  - reproducibility
+  - pronunciation
+  - multimodal
+authors:
+  - name: "[Author names to be confirmed by the PI before public release]"
+    note: >
+      Full author list, affiliations, and ORCID identifiers will be added
+      upon manuscript acceptance. Do not publish this CITATION.cff until
+      the author metadata is verified and approved.
+references:
+  - type: article
+    title: >
+      A Multimodal Machine Learning Approach to English Mispronunciation
+      Detection Using Acoustic and Surface Electromyographic Signals
+    authors:
+      - name: "[Author names — pending confirmation]"
+    year: 2026
+    status: under-review
+    notes: >
+      Manuscript under review. DOI and journal information will be added upon
+      acceptance. The CITATION.cff doi field will be set to the Zenodo/OSF
+      deposit DOI once the repository is archived.

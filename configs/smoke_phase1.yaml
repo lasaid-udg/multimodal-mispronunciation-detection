@@ -1,0 +1,110 @@
+# ============================================================
+# configs/smoke_phase1.yaml
+# ============================================================
+# SMOKE TEST — NOT FOR SCIENTIFIC INFERENCE
+#
+# This configuration is used exclusively to verify that the
+# pipeline runs end-to-end without errors after installation.
+# Results from this run are NOT comparable to the manuscript.
+#
+# Differences from paper.yaml (deliberate, to keep runtime short):
+#   - Only 3 of 7 models (svm, rf, gnb) to exercise both scaled
+#     and unscaled pipelines, class_weight tuning, and a trivial grid
+#   - 2 outer folds, 2 inner folds, 1 repeat
+#   - save_models: false  (no disk overhead)
+#   - output root: runs_smoke (isolated from real runs)
+# ============================================================
+
+experiment:
+  name: smoke_phase1
+  seed: 2026
+
+data:
+  path: data/raw/Nuevo_final_df.csv
+  subject_col: id_subject
+  word_col: id_word
+  target_col: Clase
+  damage_marker: 888888
+
+scenario:
+  phoneme: all
+  channel: ch2       # CH2 has the most participants (31) → suitable for 2-fold split
+  exclude_order_time: true
+
+cv:
+  outer_folds: 2     # minimal; NOT the paper value
+  inner_folds: 2     # minimal; NOT the paper value
+  repeats: 1         # minimal; NOT the paper value
+  shuffle: true
+
+models:
+  enabled:
+    - svm
+    - rf
+    - gnb
+  svm:
+    grid:
+      - kernel:
+          - linear
+        C:
+          - 1.0
+  rf:
+    grid:
+      n_estimators:
+        - 50
+      max_depth:
+        - 10
+      min_samples_leaf:
+        - 1
+      max_features:
+        - sqrt
+  dt:
+    grid:
+      max_depth:
+        - 10
+  knn:
+    grid:
+      n_neighbors:
+        - 5
+  gnb:
+    grid:
+      var_smoothing:
+        - 1.0e-09
+  mlp:
+    max_iter: 50
+    early_stopping: false
+    validation_fraction: 0.1
+    n_iter_no_change: 10
+    grid:
+      hidden_layer_sizes:
+        - [10]
+      activation:
+        - relu
+      alpha:
+        - 0.001
+      learning_rate_init:
+        - 0.001
+  lr:
+    max_iter: 200
+    grid:
+      C:
+        - 1.0
+
+balance:
+  class_weight: tune
+  options:
+    - null
+    - balanced
+
+selection:
+  scoring: balanced_accuracy
+
+compute:
+  n_jobs: 2
+  save_models: false
+  verbose: true
+
+output:
+  root: runs_smoke
+  save_inner_cv: true
+  parquet_compression: snappy

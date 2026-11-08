@@ -1,0 +1,36 @@
+{
+  "description": "Public derived dataset (483 columns): 8 auxiliary columns excluded after equivalence verification.",
+  "created_at": "2026-11-07T18:00:56.664872",
+  "input_csv": "data\\raw\\Nuevo_final_df.csv",
+  "input_sha256": "98499BE472A8626F88B6330850ECBAB2218E9BE69B26F79D6A2502A789FFF2E6",
+  "output_csv": "data\\derived\\public_dataset.csv",
+  "output_sha256": "89EB58339E77F6C92EB949474F2338D520C3BF627B0F0853A43CD0F00EE1EA43",
+  "input_shape": [
+    1558,
+    491
+  ],
+  "output_shape": [
+    1558,
+    483
+  ],
+  "excluded_columns": [
+    "order_CH1_cricotiroideo",
+    "order_CH2_digastrico",
+    "order_CH3_masetero",
+    "order_CH4_cigomatico",
+    "time_CH1_cricotiroideo",
+    "time_CH2_digastrico",
+    "time_CH3_masetero",
+    "time_CH4_cigomatico"
+  ],
+  "exclusion_reason": "These 8 columns (order_CH* and time_CH*) are not used as ML predictors when scenario.exclude_order_time=True (the default). Their removal is mathematically equivalent for all 20 experimental scenarios, verified by comparing X, y, and groups matrices across all channel-phoneme combinations.",
+  "equivalence_verified": true,
+  "equivalence_scope": "All 20 scenarios (4 channels × 5 phonemes): X_audio, X_emg, y, groups",
+  "sentinel_888888_preserved": true,
+  "nan_preserved": true,
+  "inf_preserved": true,
+  "row_order_preserved": true,
+  "column_order_preserved": true,
+  "privacy_note": "This dataset contains numeric participant identifiers (id_subject). Release requires human authorization. See docs/DATA_RELEASE_REVIEW.md.",
+  "WARNING": "Do not publish this file without explicit authorization from the authors and completion of the privacy review in docs/DATA_RELEASE_REVIEW.md."
+}

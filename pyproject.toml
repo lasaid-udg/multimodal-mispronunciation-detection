@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "md-emg"
+version = "0.3.5.1"
+description = "Leakage-safe participant-independent ML experiments for audio/EMG mispronunciation detection"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "numpy>=2.1,<2.2",
+  "pandas>=2.2,<2.3",
+  "scipy>=1.14,<1.15",
+  "scikit-learn>=1.5,<1.6",
+  "pyarrow>=17,<18",
+  "PyYAML>=6,<7",
+  "joblib>=1.4,<1.5",
+  "threadpoolctl>=3.5,<4",
+  "typer>=0.12,<0.13",
+  "click>=8.1,<8.2",
+  "rich>=13.9,<14",
+  "matplotlib>=3.9,<3.10"
+]
+
+[project.scripts]
+md-emg = "md_emg.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<9",
+  "ruff>=0.7,<0.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+# E = pycodestyle errors, F = pyflakes, I = isort, W = warnings
+select = ["E", "F", "I", "W"]
+ignore = [
+  "E501",   # line too long (handled by line-length above)
+  "E701",   # multiple statements on one line (colon) — deliberate compact style
+  "E702",   # multiple statements on one line (semicolon) — deliberate compact style
+  "E741",   # ambiguous variable name (l, O, I) — used in scientific code
+  "E402",   # module import not at top — used in test helpers and lazy imports
+  "F401",   # imported but unused — analysis.py re-exports internals
+  "F811",   # redefinition of unused name — expected in test conftest patterns
+]
+# Do not auto-fix in CI — report only

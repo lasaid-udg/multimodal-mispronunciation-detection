@@ -1,0 +1,122 @@
+{
+  "n_rows": 1558,
+  "n_subjects": 39,
+  "n_words": 40,
+  "class_distribution": {
+    "class_0": 1013,
+    "class_1": 545,
+    "class_ratio_0_to_1": 1.859
+  },
+  "phoneme_distributions": {
+    "t": {
+      "id_word_values": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        12,
+        14,
+        16,
+        18,
+        20
+      ],
+      "n_records": 390,
+      "n_class0": 331,
+      "n_class1": 59,
+      "manuscript_n_class0": 331,
+      "manuscript_n_class1": 59,
+      "match_manuscript": true
+    },
+    "theta": {
+      "id_word_values": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        11,
+        13,
+        15,
+        17,
+        19
+      ],
+      "n_records": 389,
+      "n_class0": 230,
+      "n_class1": 159,
+      "manuscript_n_class0": 230,
+      "manuscript_n_class1": 159,
+      "match_manuscript": true
+    },
+    "d": {
+      "id_word_values": [
+        21,
+        23,
+        25,
+        27,
+        29,
+        32,
+        34,
+        36,
+        38,
+        40
+      ],
+      "n_records": 390,
+      "n_class0": 291,
+      "n_class1": 99,
+      "manuscript_n_class0": 291,
+      "manuscript_n_class1": 99,
+      "match_manuscript": true
+    },
+    "eth": {
+      "id_word_values": [
+        22,
+        24,
+        26,
+        28,
+        30,
+        31,
+        33,
+        35,
+        37,
+        39
+      ],
+      "n_records": 389,
+      "n_class0": 161,
+      "n_class1": 228,
+      "manuscript_n_class0": 161,
+      "manuscript_n_class1": 228,
+      "match_manuscript": true
+    }
+  },
+  "channel_quality": {
+    "CH1": {
+      "clean_rows": 640,
+      "clean_subjects": 16,
+      "damaged_rows": 918
+    },
+    "CH2": {
+      "clean_rows": 1238,
+      "clean_subjects": 31,
+      "damaged_rows": 320
+    },
+    "CH3": {
+      "clean_rows": 760,
+      "clean_subjects": 19,
+      "damaged_rows": 798
+    },
+    "CH4": {
+      "clean_rows": 880,
+      "clean_subjects": 22,
+      "damaged_rows": 678
+    }
+  },
+  "missing_values": {
+    "acoustic_cols_total_nan": 195,
+    "emg_cols_total_nan_excl_sentinel": 0,
+    "total_inf": 32,
+    "inf_cols": [
+      "lpc1..lpc16 (16 columns)"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+# Data (never commit raw CSV - privacy review required before any public release)
+data/raw/*.csv
+data/raw/*.parquet
+
+# Run outputs (large; tracked in baseline/ locally, not in git)
+runs/
+runs_final_r10/
+runs_smoke/
+baseline/
+*.joblib
+*.pkl
+
+# Diagnostic / figure scripts not for public release (moved to extras/ in Prompt 3)
+extras/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environments
+.venv/
+venv/
+env/
+.conda/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Secrets
+.env
+secrets.yaml
+*.pem
+*.key
