@@ -207,15 +207,13 @@ md-emg/
 │   ├── analysis.py           # Bootstrap CIs and permutation tests
 │   ├── multiplicity.py       # BH-FDR (28 + 112 comparisons)
 │   └── cli.py                # Commands: reproduce / analyze / fdr / validate-data / smoke
-├── src/md_emg_extras/        # Exploratory analyses (PCA, permutation importance)
 ├── configs/
 │   ├── paper.yaml            # Frozen paper protocol (5×3×10, seed=2026, 7 models)
 │   └── smoke_phase1.yaml     # Fast end-to-end check (not for scientific use)
 ├── data/
 │   ├── derived/public_dataset.csv    # Derived tabular dataset (committed)
-│   ├── metadata/                     # Column dictionary, schema, statistics
-│   └── raw/                          # Place Nuevo_final_df.csv here (not committed)
-├── tests/                    # 51 tests (no CSV required for most)
+│   └── metadata/                     # Column dictionary, schema, statistics
+├── tests/                    # 48 tests (no CSV required for most)
 ├── scripts/                  # Batch scripts for all 20 scenarios
 ├── docs/                     # Protocol details, output schemas, methodology scope
 ├── environment.yml           # Pinned conda environment

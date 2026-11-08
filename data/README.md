@@ -14,14 +14,12 @@ data/
 ├── derived/
 │   ├── public_dataset.csv              # Feature dataset (1,558 rows × 483 columns)
 │   └── public_dataset_manifest.json    # SHA-256 checksums
-├── metadata/
-│   ├── data_dictionary.csv             # Column descriptions (CSV format)
-│   ├── data_dictionary.md              # Column descriptions (readable format)
-│   ├── schema.json                     # Column types and value ranges
-│   ├── dataset_statistics.json         # Summary statistics per column
-│   └── phoneme_mapping.csv             # Word ID → phoneme category (40 words)
-└── raw/
-    └── (place Nuevo_final_df.csv here) # Original file — not distributed
+└── metadata/
+    ├── data_dictionary.csv             # Column descriptions (CSV format)
+    ├── data_dictionary.md              # Column descriptions (readable format)
+    ├── schema.json                     # Column types and value ranges
+    ├── dataset_statistics.json         # Summary statistics per column
+    └── phoneme_mapping.csv             # Word ID → phoneme category (40 words)
 ```
 
 ---
@@ -111,8 +109,6 @@ each comparing two modalities:
 The pipeline can also run from the original 491-column file (`Nuevo_final_df.csv`),
 which additionally contains 8 auxiliary ordering/timing columns not used by the ML pipeline.
 To obtain it, contact the corresponding author.
-
-Place it at `data/raw/Nuevo_final_df.csv` before running the pipeline.
 
 ---
 
