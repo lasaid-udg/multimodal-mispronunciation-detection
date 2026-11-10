@@ -1,26 +1,18 @@
 # ============================================================
-# configs/smoke_phase1.yaml
+# configs/smoke.yaml — quick end-to-end installation check
 # ============================================================
-# SMOKE TEST — NOT FOR SCIENTIFIC INFERENCE
+# Run with: md-emg smoke
 #
-# This configuration is used exclusively to verify that the
-# pipeline runs end-to-end without errors after installation.
-# Results from this run are NOT comparable to the manuscript.
-#
-# Differences from paper.yaml (deliberate, to keep runtime short):
-#   - Only 3 of 7 models (svm, rf, gnb) to exercise both scaled
-#     and unscaled pipelines, class_weight tuning, and a trivial grid
-#   - 2 outer folds, 2 inner folds, 1 repeat
-#   - save_models: false  (no disk overhead)
-#   - output root: runs_smoke (isolated from real runs)
+# 3 models, 2 outer folds, 2 inner folds, 1 repeat (~2 min).
+# Results are NOT comparable to the paper.
 # ============================================================
 
 experiment:
-  name: smoke_phase1
+  name: smoke
   seed: 2026
 
 data:
-  path: data/raw/Nuevo_final_df.csv
+  path: data/derived/public_dataset.csv
   subject_col: id_subject
   word_col: id_word
   target_col: Clase

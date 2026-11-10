@@ -138,8 +138,8 @@ def validate_data(
 
 @app.command("smoke")
 def smoke_cmd(
-    config: Path = typer.Option(Path("configs/smoke_phase1.yaml"), "--config", "-c",
-                                 help="Smoke config (default: configs/smoke_phase1.yaml)."),
+    config: Path = typer.Option(Path("configs/smoke.yaml"), "--config", "-c",
+                                 help="Smoke config (default: configs/smoke.yaml)."),
     output_root: Path | None = typer.Option(None, "--output-root"),
     n_jobs: int | None = typer.Option(None, "--n-jobs", "-j"),
 ):
@@ -174,21 +174,19 @@ def reproduce(
     no_save_models: bool = typer.Option(False, "--no-save-models", help="Do not save fitted .joblib models."),
     quiet: bool = typer.Option(False, "--quiet"),
 ):
-    """Run one full-protocol scenario (one channel x phoneme combination).
+    """Run one full-protocol scenario (one channel × phoneme combination).
 
     Uses the frozen paper configuration (5 outer folds, 3 inner folds, 10 repeats,
-    7 models, seed=2026, 2000 bootstrap/permutation replicates).  Requires the
-    full dataset at data/raw/Nuevo_final_df.csv or data/derived/public_dataset.csv.
+    7 models, seed=2026, 2000 bootstrap/permutation replicates).
 
-    To reproduce all 20 manuscript scenarios, run once for each combination:
+    To reproduce all 20 scenarios, run once for each combination:
       channels: ch1, ch2, ch3, ch4
       phonemes: all, t, d, theta, eth
 
-    Estimated wall time per scenario: 5-15 CPU·hours (varies by channel/model).
-    Total for all 20 scenarios with 8 parallel jobs: ~10-20 hours.
+    Estimated wall time per scenario: 5–15 CPU-hours (varies by channel/model).
+    Total for all 20 scenarios: ~50–100 CPU-hours.
 
-    WARNING: Do NOT use this command without reviewing resource requirements.
-    The run is reanudable with --resume <run_dir> if interrupted.
+    The run can be safely interrupted and resumed with --resume <run_dir>.
     """
     if channel.lower() not in {"ch1", "ch2", "ch3", "ch4"}:
         raise typer.BadParameter("--channel must be one of: ch1, ch2, ch3, ch4")

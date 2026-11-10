@@ -1,9 +1,6 @@
-# docs/OUTPUTS.md
-# Run Output Files — Schema and Contracts
+# Run Output Files
 
-This document describes every file produced by `md-emg run` / `md-emg reproduce`
-inside a run directory, including their schema, invariants, and how they relate
-to the reproducibility contract.
+This document describes every file produced by `md-emg reproduce` inside a run directory.
 
 ---
 
