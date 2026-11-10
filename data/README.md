@@ -30,7 +30,7 @@ data/
 |----------|-------|
 | Rows | 1,558 (one per participant × word recording) |
 | Columns | 483 |
-| SHA-256 | `89EB58339E77F6C92EB949474F2338D520C3BF627B0F0853A43CD0F00EE1EA43` |
+| SHA-256 | `E47AE2E5510F29A290705DD0718198E7B3801CDD670AD960095D6569BC36C028` |
 | Participants | 39 |
 | Words | 40 (10 per phoneme contrast: /t/, /θ/, /d/, /ð/) |
 | Class 0 — correct pronunciation | 1,013 rows |

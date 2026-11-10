@@ -39,7 +39,7 @@ import pandas as pd
 EXPECTED = {
     "public_csv":  "data/derived/public_dataset.csv",
     "original_csv": "data/raw/Nuevo_final_df.csv",
-    "sha256_public":   "89EB58339E77F6C92EB949474F2338D520C3BF627B0F0853A43CD0F00EE1EA43",
+    "sha256_public":   "E47AE2E5510F29A290705DD0718198E7B3801CDD670AD960095D6569BC36C028",
     "sha256_original": "98499BE472A8626F88B6330850ECBAB2218E9BE69B26F79D6A2502A789FFF2E6",
     "n_rows":    1558,
     "n_cols_public":   483,

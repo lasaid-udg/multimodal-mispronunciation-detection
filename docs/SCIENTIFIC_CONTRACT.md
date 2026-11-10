@@ -14,7 +14,7 @@ All parameters listed here are frozen and match the published paper.
 | Property | Value |
 |---|---|
 | File | `data/derived/public_dataset.csv` |
-| SHA-256 | `89EB58339E77F6C92EB949474F2338D520C3BF627B0F0853A43CD0F00EE1EA43` |
+| SHA-256 | `E47AE2E5510F29A290705DD0718198E7B3801CDD670AD960095D6569BC36C028` |
 | Total records | 1,558 |
 | Total columns | 483 |
 | Participants | 39 |

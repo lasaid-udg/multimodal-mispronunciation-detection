@@ -75,7 +75,7 @@ The dataset is included at `data/derived/public_dataset.csv` (10 MB).
 | Words | 40 (10 per phoneme contrast: /t/, /θ/, /d/, /ð/) |
 | Correct pronunciations | 1,013 |
 | Mispronunciations | 545 |
-| SHA-256 | `89EB58339E77F6C92EB949474F2338D520C3BF627B0F0853A43CD0F00EE1EA43` |
+| SHA-256 | `E47AE2E5510F29A290705DD0718198E7B3801CDD670AD960095D6569BC36C028` |
 
 The dataset was derived from synchronized audio and surface EMG recordings.
 Raw signals are not included — contact the corresponding author to request access.

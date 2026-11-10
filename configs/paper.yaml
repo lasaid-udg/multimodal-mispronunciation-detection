@@ -22,7 +22,7 @@ experiment:
   #   estimator random state: same as inner seed
 
 data:
-  path: data/raw/Nuevo_final_df.csv
+  path: data/derived/public_dataset.csv
   subject_col: id_subject
   word_col: id_word
   target_col: Clase

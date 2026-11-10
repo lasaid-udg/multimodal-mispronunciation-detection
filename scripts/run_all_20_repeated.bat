@@ -14,8 +14,8 @@ if "%NJOBS%"=="" set NJOBS=8
 set OUTROOT=%~3
 if "%OUTROOT%"=="" set OUTROOT=runs_final_r%REPEATS%
 
-if not exist "configs\final.yaml" (
-  echo ERROR: run this BAT from the project root. configs\final.yaml was not found.
+if not exist "configs\paper.yaml" (
+  echo ERROR: run this BAT from the project root. configs\paper.yaml was not found.
   pause
   exit /b 1
 )
@@ -55,7 +55,7 @@ echo.
 echo ------------------------------------------------------------
 echo channel=%~1  phoneme=%~2  repeats=%REPEATS%
 echo ------------------------------------------------------------
-md-emg run -c configs/final.yaml --channel %~1 --phoneme %~2 --repeats %REPEATS% --n-jobs %NJOBS% --output-root "%OUTROOT%"
+md-emg run -c configs/paper.yaml --channel %~1 --phoneme %~2 --repeats %REPEATS% --n-jobs %NJOBS% --output-root "%OUTROOT%"
 if errorlevel 1 exit /b 1
 exit /b 0
 
