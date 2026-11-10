@@ -7,7 +7,7 @@ Code and dataset for the paper:
 > — Arturo Guzmán-Vázquez, Israel Román-Godínez, Sulema Torres-Ramos
 > — Universidad de Guadalajara, CUCEI
 
-[![CI](https://github.com/placeholder/md-emg/actions/workflows/ci.yml/badge.svg)](https://github.com/placeholder/md-emg/actions/workflows/ci.yml)
+[![CI](https://github.com/lasaid-udg/multimodal-mispronunciation-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/lasaid-udg/multimodal-mispronunciation-detection/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Data: CC BY 4.0](https://img.shields.io/badge/Data-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
