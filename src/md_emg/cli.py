@@ -20,7 +20,7 @@ app = typer.Typer(add_completion=False, no_args_is_help=True)
 
 @app.command()
 def audit(
-    config: Path = typer.Option(Path("configs/final.yaml"), "--config", "-c"),
+    config: Path = typer.Option(Path("configs/paper.yaml"), "--config", "-c"),
     output: Path | None = typer.Option(None, "--output"),
 ):
     """Audit the dataset without training models."""
@@ -35,7 +35,7 @@ def audit(
 
 @app.command()
 def run(
-    config: Path = typer.Option(Path("configs/final.yaml"), "--config", "-c"),
+    config: Path = typer.Option(Path("configs/paper.yaml"), "--config", "-c"),
     n_jobs: int | None = typer.Option(None, "--n-jobs", "-j"),
     seed: int | None = typer.Option(None, "--seed"),
     outer_folds: int | None = typer.Option(None, "--outer-folds"),

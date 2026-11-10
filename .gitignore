@@ -40,3 +40,8 @@ Thumbs.db
 secrets.yaml
 *.pem
 *.key
+
+
+#Results
+runs_reproduction/
+
