@@ -43,7 +43,7 @@ cv:
   inner_folds: 3
   repeats: 10          # MANUSCRIPT VALUE — 5 outer folds × 10 repeats = 50 outer fits per model/modality
   shuffle: true
-  # NOTE: configs/final.yaml keeps repeats: 1 as a safe default to avoid
+  # NOTE: configs/paper.yaml keeps repeats: 1 as a safe default to avoid
   # accidental long runs. THIS file (paper.yaml) explicitly sets repeats: 10
   # to match the manuscript protocol. Do not reduce this value to save time
   # without marking results as non-scientific.
